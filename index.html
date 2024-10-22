@@ -51,16 +51,17 @@ h2 {
 }
 
 input {
-    font-size: 3vw; /* Slightly smaller than before for a modern look */
-    width: 100%;
-    max-width: 400px; /* Adjust width on larger screens */
-    border: 2px solid #ccc; /* Slightly thicker border */
+    font-size: 3vw; /* Slightly smaller for a modern look */
+    width: 100%; /* Full width of the container */
+    max-width: calc(100% - 30px); /* Full width minus padding */
+    border: 2px solid #ccc; /* Thicker border */
     border-radius: 12px; /* Rounded corners */
     padding: 10px 15px; /* Comfortable padding inside the input */
     transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
-    background-color: #f9f9f9; /* Slight background color */
+    background-color: #f9f9f9; /* Background color */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
+
 h4 {
     font-style: italic; 
     color: grey;
@@ -120,27 +121,21 @@ img {
     font-style: italic;
 }
 
-
 /* Media Query for smaller screens */
 @media (max-width: 480px) {
+    input {
+        max-width: calc(100% - 20px); /* Adjust max width for small screens */
+        padding: 10px; /* Reduce padding for smaller screens */
+    }
     h1 {
         font-size: 8vw; /* Increase font size for very small screens */
     }
     h2 {
         font-size: 6vw; /* Increase font size for very small screens */
     }
-    input {
-        font-size: clamp(16px, 10vw, 24px); /* Ensures the font size is between 16px and 24px */
-    }
     #calculateButton {
-        background-color: purple; /* Default background color */
-        font-family: 'Karla', sans-serif;
-        color: white; /* Text color */
-        padding: 12px 24px; /* Slightly increased padding for better touch targets */
-        border: none; /* No border */
-        border-radius: 5px; /* Rounded corners */
         font-size: 6vw; /* Increased font size for better visibility on small screens */
-        min-font-size: 20px; /* Minimum font size to ensure readability */
+        padding: 12px 24px; /* Increased padding */
     }
 }
 
