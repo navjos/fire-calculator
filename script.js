@@ -42,7 +42,7 @@ function updateMessages() {
     var messagesDiv = document.getElementById("messages");
 
     if (!isNaN(x) && !isNaN(y)) {
-        messagesDiv.innerHTML = "Nice! You have <mark>" + x.toFixed(1) + "</mark> years until retirement, and <mark>" + y.toFixed(1) + "</mark> years to reach Coast Fire.";
+        messagesDiv.innerHTML = "Nice! You have <mark>" + x.toFixed(1) + "</mark> years until retirement, and <mark>" + y.toFixed(1) + "</mark> years to reach Coast FIRE.";
         messagesDiv.style.display = 'block';
     } else {
         messagesDiv.style.display = 'none';
@@ -156,12 +156,12 @@ function clearResults() {
 
 // Helper function to display results
 function displayResults(fireNumber, coastFireNumber, monthlyPayments) {
-    document.getElementById("fireNumber").innerHTML = "Fire Number: $<mark>" + 
+    document.getElementById("fireNumber").innerHTML = "FIRE Number: $<mark>" + 
         fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
-    document.getElementById("coastFireNumber").innerHTML = "Coast Fire Number: $<mark>" + 
+    document.getElementById("coastFireNumber").innerHTML = "Coast FIRE Number: $<mark>" + 
         coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
     document.getElementById("monthlyContributions").innerHTML = `You need to invest <mark>$${
-        monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly in order to reach Coast Fire.`;
+        monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly in order to reach Coast FIRE.`;
     
     // Show the output section only after all calculations are complete
     document.getElementById("output").style.display = 'block';
