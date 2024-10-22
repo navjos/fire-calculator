@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Karla:wght@400&display=swap" rel="stylesheet">
+    <script src="script.js" defer></script>
+    <title>WealthOnthe7 Retirement Calculator</title>
+    <style>
+body {
+    font-family: 'Karla', sans-serif;
+    font-size: 4vw; /* Responsive font size */
+    width: 100vw;
+    text-align: justify; /* Justify text */
+    display: flex; /* Use flexbox to center content */
+    flex-direction: column; /* Arrange children in a column */
+    align-items: center; /* Center horizontally */
+    margin: 40px; /* Remove default margin */
+    padding: 20px; /* Add some padding */
+}
+
+.profile-container {
+    width: 90vw; /* Adjust for mobile */
+    max-width: 600px; /* Set a max width for larger screens */
+    text-align: left; /* Align text to the left */
+    padding: 10px; /* Add some padding */
+    border-radius: 10px; /* Optional rounded corners */
+}
+
+h1 {
+    color: #333; /* Title color */
+    font-size: 6vw; /* Responsive font size */
+    text-align: center; /* Center the title */
+    max-font-size: 36px; /* Set a maximum font size */
+}
+
+h2 {
+    color: rgb(185, 51, 173); /* Title color */
+    font-size: 5vw; /* Responsive font size */
+    max-font-size: 30px; /* Set a maximum font size */
+}
+
+input {
+    font-size: 2vw; /* Responsive input font size */
+    width: 80%; /* Input width responsive */
+    max-width: 150px; /* Max width for larger screens */
+    border: 1px solid #ccc; /* Default border color */
+    border-radius: 25px; /* Rounded corners */
+    padding: 5px; /* Add some padding inside the input */
+    transition: border-color 0.3s ease; /* Smooth transition for border color */
+}
+
+input:focus,
+input:hover {
+    border-color: rgb(185, 51, 173); /* Change border color on focus/hover */
+}
+
+#calculateButton {
+    background-color: purple; /* Default background color */
+    color: white; /* Text color */
+    padding: 10px 20px; /* Padding for size */
+    border: none; /* No border */
+    border-radius: 5px; /* Rounded corners */
+    font-size: 2vw; /* Responsive font size */
+    cursor: pointer; /* Pointer cursor on hover */
+    transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+}
+
+#calculateButton:hover {
+    background-color: rgb(185, 51, 173); /* Hover color */
+    transform: scale(1.05); /* Slight grow on hover */
+}
+
+/* Sparkle GIF styling */
+.sparkle {
+    width: 30px; /* Adjust the size of the sparkle GIF */
+    height: auto; /* Maintain aspect ratio */
+    margin-left: 10px; /* Space between title and sparkle */
+}
+
+img {
+    width: 50vw; /* Responsive width */
+    max-width: 100%; /* Ensure images don't exceed the container */
+    height: auto; /* Maintain aspect ratio */
+    display: block; /* Center block elements */
+    margin: 0 auto; /* Center images */
+}
+
+#messages,
+#result {
+    color: rgba(0, 0, 0, 0.521);
+    font-style: italic;
+}
+
+/* Media Query for smaller screens */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 8vw; /* Increase font size for very small screens */
+    }
+    h2 {
+        font-size: 6vw; /* Increase font size for very small screens */
+    }
+}
+
+/* Additional media query for larger screens */
+@media (min-width: 769px) {
+    body {
+        font-size: 20px; /* Set a base font size for desktop */
+    }
+    h1 {
+        font-size: 36px; /* Set max font size for desktop */
+    }
+    h2 {
+        font-size: 30px; /* Set max font size for desktop */
+    }
+}
+    </style>
+<body>
+</head>
+<img src="w07.png">
+
+<h1>
+    <div class = "title"> <img class="sparkle" src="https://media.tenor.com/9KFWbDIvHCEAAAAi/sparkles-glitter.gif" alt="Sparkle">Retirement Calculator
+    </div>
+</h1>
+
+    <div class="profile-container">
+    <div class="personalprofile">
+        <h2>Personal Profile</h2>
+        Current Age 
+        <input type="number" id="currentage" placeholder="24" oninput="updateMessages()"><br><br>
+        Retirement Age
+        <input type="number" id="retirementage" placeholder="50" oninput="updateMessages()"><br><br>
+        Coast Fire Age
+        <input type="number" id="coastfireage" placeholder="40" oninput="updateMessages()"><br><br>
+    </div>
+    <br>
+    <div id="messages" style="display: none;"></div> <br>
+    
+    <div class="marketprofile" style="display: none;">
+        <h2>Market Profile</h2>
+        Inflation rate (%)
+        <input type="number" id="inflation" placeholder="2.1"><br><br>
+        Nominal market return (%)
+        <input type="number" id="nomreturn" placeholder="5"><br><br>
+        Current Annual Expenses ($) 
+        <input type="number" id="currentexpenses" placeholder="34000" oninput="handleCurrentExpensesInput()"><br><br>
+        <br> <span id="result"></span><br><br>
+    
+        <div id="withdrawalSection" style="display: none;">
+            <h2>Annual Withdrawal Rate</h2> <br>
+            Choose an annual withdrawal rate:<br><br>
+            <input type="range" id="withdrawalrate" min="2" max="5" value="4" step="0.5" onchange="updateRate()">
+            <span id="rate_val">4</span>%<br>
+            <h2>Initial Investment</h2><br>
+            $<input type="number" id="initialInvestment" placeholder="140000"><br><br><br>
+            <button id="calculateButton" onclick="calculateFireAndCoastFireNumbers()">Calculate</button>
+        </div>
+        <br>
+        <div id="output" style="display: none;">
+        <h2><img class="sparkle" src="https://media.tenor.com/9KFWbDIvHCEAAAAi/sparkles-glitter.gif" alt="Sparkle">Results</h2>
+            <p id="fireNumber"></p>
+            <p id="coastFireNumber"></p>
+            <p id="monthlyContributions"></p> <!-- This is where the monthly contributions will be displayed -->
+            <br>
+            <h3> Keep going, one stop at a time.</h3>
+            <img id = "cartoon" src="fam3.png">
+        </div>
+    </div>    
+</div>
+</body>
+</html>
