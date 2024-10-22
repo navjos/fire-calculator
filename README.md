@@ -1,3 +1,4 @@
 # fire-calculator
 
-This is a public application in order to find your FIRE and Coast FIRE numbers.  
+This public application helps you calculate your FIRE (Financial Independence, Retire Early) and Coast FIRE numbers, along with the monthly investment required to achieve your goals.
+
