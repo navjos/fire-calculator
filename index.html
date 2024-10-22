@@ -10,22 +10,32 @@
 body {
     font-family: 'Karla', sans-serif;
     font-size: 4vw; /* Responsive font size */
-    width: 100vw;
-    text-align: justify; /* Justify text */
-    display: flex; /* Use flexbox to center content */
-    flex-direction: column; /* Arrange children in a column */
-    align-items: center; /* Center horizontally */
-    margin: 40px; /* Remove default margin */
-    padding: 20px; /* Add some padding */
+    max-width: 100%; /* Prevent overflow */
+    text-align: justify;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: lavender;
+    margin: 0; /* Reset default margin */
+    padding: 20px;
+    box-sizing: border-box; /* Include padding/border in width/height */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
+
 
 .profile-container {
     width: 90vw; /* Adjust for mobile */
-    max-width: 600px; /* Set a max width for larger screens */
-    text-align: left; /* Align text to the left */
-    padding: 10px; /* Add some padding */
-    border-radius: 10px; /* Optional rounded corners */
+    max-width: 600px; 
+    text-align: left;
+    padding: 20px;
+    border-radius: 10px;
+    background-color: white;
+    border: 5px solid rgb(185, 51, 173);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    margin: 20px;
+    box-sizing: border-box; /* Include padding in the width calculation */
 }
+
 
 h1 {
     color: #333; /* Title color */
@@ -41,27 +51,44 @@ h2 {
 }
 
 input {
-    font-size: 2vw; /* Responsive input font size */
-    width: 80%; /* Input width responsive */
-    max-width: 150px; /* Max width for larger screens */
-    border: 1px solid #ccc; /* Default border color */
-    border-radius: 25px; /* Rounded corners */
-    padding: 5px; /* Add some padding inside the input */
-    transition: border-color 0.3s ease; /* Smooth transition for border color */
+    font-size: 3vw; /* Slightly smaller than before for a modern look */
+    width: 100%;
+    max-width: 400px; /* Adjust width on larger screens */
+    border: 2px solid #ccc; /* Slightly thicker border */
+    border-radius: 12px; /* Rounded corners */
+    padding: 10px 15px; /* Comfortable padding inside the input */
+    transition: box-shadow 0.3s ease, border-color 0.3s ease; /* Smooth transitions */
+    background-color: #f9f9f9; /* Slight background color */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+h4 {
+    font-style: italic; 
+    color: grey;
+    font-size: 15px;
+
 }
 
-input:focus,
-input:hover {
-    border-color: rgb(185, 51, 173); /* Change border color on focus/hover */
+/* Styling the placeholder text */
+input::placeholder {
+    /* font-size: 2.8vw; Make placeholder font size slightly smaller */
+    color: #999; /* Light grey for placeholder */
 }
+
+input:focus {
+    border-color: rgb(185, 51, 173); /* Highlight border when focused */
+    box-shadow: 0 4px 8px rgba(185, 51, 173, 0.4); /* More intense shadow when focused */
+    outline: none; /* Remove default outline */
+}
+
 
 #calculateButton {
     background-color: purple; /* Default background color */
+    font-family: 'Karla', sans-serif;
     color: white; /* Text color */
     padding: 10px 20px; /* Padding for size */
     border: none; /* No border */
     border-radius: 5px; /* Rounded corners */
-    font-size: 2vw; /* Responsive font size */
+    font-size: 1.5vw; /* Responsive font size */
     cursor: pointer; /* Pointer cursor on hover */
     transition: transform 0.3s ease, background-color 0.3s ease; /* Smooth transition */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
@@ -93,6 +120,7 @@ img {
     font-style: italic;
 }
 
+
 /* Media Query for smaller screens */
 @media (max-width: 480px) {
     h1 {
@@ -101,7 +129,22 @@ img {
     h2 {
         font-size: 6vw; /* Increase font size for very small screens */
     }
+    input {
+        font-size: clamp(16px, 10vw, 24px); /* Ensures the font size is between 16px and 24px */
+    }
+    #calculateButton {
+        background-color: purple; /* Default background color */
+        font-family: 'Karla', sans-serif;
+        color: white; /* Text color */
+        padding: 12px 24px; /* Slightly increased padding for better touch targets */
+        border: none; /* No border */
+        border-radius: 5px; /* Rounded corners */
+        font-size: 6vw; /* Increased font size for better visibility on small screens */
+        min-font-size: 20px; /* Minimum font size to ensure readability */
+    }
 }
+
+
 
 /* Additional media query for larger screens */
 @media (min-width: 769px) {
@@ -114,6 +157,9 @@ img {
     h2 {
         font-size: 30px; /* Set max font size for desktop */
     }
+    input {
+        font-size: 2vw
+    }
 }
     </style>
 <body>
@@ -122,17 +168,21 @@ img {
 
 <h1>
     <div class = "title"> <img class="sparkle" src="https://media.tenor.com/9KFWbDIvHCEAAAAi/sparkles-glitter.gif" alt="Sparkle">Retirement Calculator
+
     </div>
 </h1>
 
     <div class="profile-container">
     <div class="personalprofile">
         <h2>Personal Profile</h2>
-        Current Age 
+        Your Age <br>
+        <h4>The starting point</h4>
         <input type="number" id="currentage" placeholder="24" oninput="updateMessages()"><br><br>
-        Retirement Age
+        Retirement Age <br>
+        <h4>When you no longer want to work</h4>
         <input type="number" id="retirementage" placeholder="50" oninput="updateMessages()"><br><br>
-        Coast Fire Age
+        Coast Fire Age <br>
+        <h4>When you can stop saving for retirement</h4>
         <input type="number" id="coastfireage" placeholder="40" oninput="updateMessages()"><br><br>
     </div>
     <br>
@@ -140,31 +190,36 @@ img {
     
     <div class="marketprofile" style="display: none;">
         <h2>Market Profile</h2>
-        Inflation rate (%)
-        <input type="number" id="inflation" placeholder="2.1"><br><br>
-        Nominal market return (%)
+        Inflation rate (%) <br>
+        <h4>How much will inflation be in the future</h4>
+        <input type="number" id="inflation" step ="0.1" placeholder="2.1"><br> <br>
+        Nominal market return (%) <br>
+        <h4>How much do you expect the market to return in the future</h4>
         <input type="number" id="nomreturn" placeholder="5"><br><br>
-        Current Annual Expenses ($) 
+        Current Annual Expenses ($)<br>
+        <h4>How much do you currenltly spend every year</h4>
         <input type="number" id="currentexpenses" placeholder="34000" oninput="handleCurrentExpensesInput()"><br><br>
         <br> <span id="result"></span><br><br>
     
         <div id="withdrawalSection" style="display: none;">
-            <h2>Annual Withdrawal Rate</h2> <br>
-            Choose an annual withdrawal rate:<br><br>
+            <h2>Annual Withdrawal Rate</h2> 
+            <h4>What percent of your savings do you plan to touch every year in retirement</h4>
+            <!-- Choose an annual withdrawal rate:<br><br> -->
             <input type="range" id="withdrawalrate" min="2" max="5" value="4" step="0.5" onchange="updateRate()">
             <span id="rate_val">4</span>%<br>
-            <h2>Initial Investment</h2><br>
-            $<input type="number" id="initialInvestment" placeholder="140000"><br><br><br>
-            <button id="calculateButton" onclick="calculateFireAndCoastFireNumbers()">Calculate</button>
+            <h2>Current Savings</h2>
+            <h4>How much do you already have saved for retirement</h4>
+            $ <input type="number" id="initialInvestment" placeholder="140000"><br><br><br>
+            <button id="calculateButton" onclick="calculate()">Calculate</button><br>
         </div>
+    </div>
         <br>
-        <div id="output" style="display: none;">
-        <h2><img class="sparkle" src="https://media.tenor.com/9KFWbDIvHCEAAAAi/sparkles-glitter.gif" alt="Sparkle">Results</h2>
+        <div id="output" style="display:none;">
+            <h2><img class="sparkle" src="https://media.tenor.com/9KFWbDIvHCEAAAAi/sparkles-glitter.gif" alt="Sparkle">Results</h2>
             <p id="fireNumber"></p>
             <p id="coastFireNumber"></p>
-            <p id="monthlyContributions"></p> <!-- This is where the monthly contributions will be displayed -->
-            <br>
-            <h3> Keep going, one stop at a time.</h3>
+            <p id="monthlyContributions"></p><br>
+            <h5 color="black" font-style="bold"> Keep going, one stop at a time.</h3>
             <img id = "cartoon" src="fam3.png">
         </div>
     </div>    
