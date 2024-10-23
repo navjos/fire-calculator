@@ -16,12 +16,12 @@ function handleCurrentExpensesInput() {
 function futureValue() {
     const present = parseFloat(document.getElementById("currentexpenses").value);
     const rate = parseFloat(document.getElementById("inflation").value);
-    const fireAge = parseFloat(document.getElementById("retirementage").value);
+    const futureAge = parseFloat(document.getElementById("retirementage").value);
     const presentAge = parseFloat(document.getElementById("currentage").value);
     
-    const time = fireAge - presentAge;
+    const time = futureAge - presentAge;
 
-    if (isNaN(present) || present <= 0 || isNaN(rate) || isNaN(fireAge) || isNaN(presentAge)) {
+    if (isNaN(present) || present <= 0 || isNaN(rate) || isNaN(futureAge) || isNaN(presentAge)) {
         document.getElementById("result").innerHTML = '';
         return;
     }
@@ -42,7 +42,7 @@ function updateMessages() {
     var messagesDiv = document.getElementById("messages");
 
     if (!isNaN(x) && !isNaN(y)) {
-        messagesDiv.innerHTML = "Nice! You have <mark>" + x.toFixed(1) + "</mark> years until retirement, and <mark>" + y.toFixed(1) + "</mark> years to reach Coast FIRE.";
+        messagesDiv.innerHTML = "Nice! You have <mark>" + x.toFixed(1) + "</mark> years until retirement and <mark>" + y.toFixed(1) + "</mark> years until Coast FIRE";
         messagesDiv.style.display = 'block';
     } else {
         messagesDiv.style.display = 'none';
@@ -65,21 +65,46 @@ function calculate() {
     // Hide the output initially
     document.getElementById("output").style.display = 'none';
 
-    const presentExpenses = parseFloat(document.getElementById("currentexpenses").value); 
-    const rate = parseFloat(document.getElementById("inflation").value) / 100; 
-    const fireAge = parseFloat(document.getElementById("retirementage").value); 
-    const presentAge = parseFloat(document.getElementById("currentage").value); 
-    const coastFireAge = parseFloat(document.getElementById("coastfireage").value); 
-    const nominalMarketReturn = parseFloat(document.getElementById("nomreturn").value) / 100; 
+    const presentExpenses = parseFloat(document.getElementById("currentexpenses").value);
+    const rate = parseFloat(document.getElementById("inflation").value);
+    const futureAge = parseFloat(document.getElementById("retirementage").value);
+    const presentAge = parseFloat(document.getElementById("currentage").value);
     
-    // Calculate future expenses and FIRE number
-    const time = fireAge - presentAge;
-    const futureExpenses = presentExpenses * Math.pow((1 + rate), time);
-    const withdrawalRate = parseFloat(document.getElementById("withdrawalrate").value) / 100;
-    const fireNumber = futureExpenses / withdrawalRate;
+    const time = futureAge - presentAge;
 
     // Validate input
-    if (isNaN(presentExpenses) || isNaN(rate) || isNaN(fireAge) || isNaN(presentAge) || time <= 0) {
+    if (isNaN(presentExpenses) || isNaN(rate) || isNaN(futureAge) || isNaN(presentAge) || time <= 0) {
+        document.getElementById("fireNumber").innerHTML = "";
+        document.getElementById("coastFireNumber").innerHTML = "";
+        document.getElementById("monthlyContributions").innerHTML = "";
+        return;
+    }
+
+    // Calculate future expenses
+    const futureExpenses = presentExpenses * Math.pow((1 + (rate / 100)), time);
+    const withdrawalRate = parseFloat(document.getElementById("withdrawalrate").value);
+    let multiplier;
+
+    // Determine multiplier for the withdrawal rate
+    switch (withdrawalRate) {
+        case 2: multiplier = 50; break;
+        case 2.5: multiplier = 40; break;
+        case 3: multiplier = 33; break;
+        case 3.5: multiplier = 28.57; break;
+        case 4: multiplier = 25; break;
+        case 4.5: multiplier = 22; break;
+        case 5: multiplier = 20; break;
+        default: return;
+    }
+
+    const fireNumber = futureExpenses * multiplier;
+    const currentAge = parseFloat(document.getElementById("currentage").value);
+    const coastFireAge = parseFloat(document.getElementById("coastfireage").value);
+    const fireAge = parseFloat(document.getElementById("retirementage").value);
+    const nominalMarketReturn = parseFloat(document.getElementById("nomreturn").value) / 100;
+
+    // Validate coast fire age and market return
+    if (isNaN(coastFireAge) || isNaN(nominalMarketReturn)) {
         document.getElementById("fireNumber").innerHTML = "";
         document.getElementById("coastFireNumber").innerHTML = "";
         document.getElementById("monthlyContributions").innerHTML = "";
@@ -89,7 +114,7 @@ function calculate() {
     // Calculate coast fire number and monthly payments
     const coastFireNumber = fireNumber / Math.pow((1 + nominalMarketReturn), (fireAge - coastFireAge));
     const initialInvestment = parseFloat(document.getElementById("initialInvestment").value) || 0;
-    const yearsToGrow = coastFireAge - presentAge; // Fix this variable
+    const yearsToGrow = coastFireAge - currentAge;
 
     const FV_initialInvestment = initialInvestment * Math.pow((1 + nominalMarketReturn), yearsToGrow);
     const FV_payments = coastFireNumber - FV_initialInvestment;
@@ -100,22 +125,44 @@ function calculate() {
     }
 
     // Update the display elements
-    document.getElementById("fireNumber").innerHTML = "Fire Number: $<mark>" + fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
-    document.getElementById("coastFireNumber").innerHTML = "Coast Fire Number: $<mark>" + coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
-    document.getElementById("monthlyContributions").innerHTML = `You need to invest <mark>$${monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly in order to reach Coast Fire.`;
+    document.getElementById("fireNumber").innerHTML = "Número FIRE: $<mark>" + fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
+    document.getElementById("coastFireNumber").innerHTML = "Número Coast FIRE: $<mark>" + coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
+    document.getElementById("monthlyContributions").innerHTML = `Necesitas invertir <mark>$${monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> mensualmente para alcanzar Coast Fire.`;
 
     // Show the output section
     document.getElementById("output").style.display = 'block';
 }
 
+// Helper function to get multiplier based on withdrawal rate
+function getMultiplierForRate(rate) {
+    const multipliers = {
+        2: 50,
+        2.5: 40,
+        3: 33,
+        3.5: 28.57,
+        4: 25,
+        4.5: 22,
+        5: 20
+    };
+    return multipliers[rate];
+}
+
+// Helper function to clear results
+function clearResults() {
+    document.getElementById("fireNumber").innerHTML = "";
+    document.getElementById("coastFireNumber").innerHTML = "";
+    document.getElementById("monthlyContributions").innerHTML = "";
+    document.getElementById("output").style.display = 'none';
+}
+
 // Helper function to display results
 function displayResults(fireNumber, coastFireNumber, monthlyPayments) {
-    document.getElementById("fireNumber").innerHTML = "FIRE Number: $<mark>" + 
+    document.getElementById("fireNumber").innerHTML = "Fire Number: $<mark>" + 
         fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
-    document.getElementById("coastFireNumber").innerHTML = "Coast FIRE Number: $<mark>" + 
+    document.getElementById("coastFireNumber").innerHTML = "Coast Fire Number: $<mark>" + 
         coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
     document.getElementById("monthlyContributions").innerHTML = `You need to invest <mark>$${
-        monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly in order to reach Coast FIRE.`;
+        monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly in order to reach Coast Fire.`;
     
     // Show the output section only after all calculations are complete
     document.getElementById("output").style.display = 'block';
