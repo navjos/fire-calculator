@@ -16,12 +16,12 @@ function handleCurrentExpensesInput() {
 function futureValue() {
     const present = parseFloat(document.getElementById("currentexpenses").value);
     const rate = parseFloat(document.getElementById("inflation").value);
-    const futureAge = parseFloat(document.getElementById("retirementage").value);
+    const fireAge = parseFloat(document.getElementById("retirementage").value);
     const presentAge = parseFloat(document.getElementById("currentage").value);
     
-    const time = futureAge - presentAge;
+    const time = fireAge - presentAge;
 
-    if (isNaN(present) || present <= 0 || isNaN(rate) || isNaN(futureAge) || isNaN(presentAge)) {
+    if (isNaN(present) || present <= 0 || isNaN(rate) || isNaN(fireAge) || isNaN(presentAge)) {
         document.getElementById("result").innerHTML = '';
         return;
     }
@@ -65,47 +65,21 @@ function calculate() {
     // Hide the output initially
     document.getElementById("output").style.display = 'none';
 
-    const presentExpenses = parseFloat(document.getElementById("currentexpenses").value);
-    const rate = parseFloat(document.getElementById("inflation").value);
-    const futureAge = parseFloat(document.getElementById("retirementage").value);
-    const presentAge = parseFloat(document.getElementById("currentage").value);
+    const presentExpenses = parseFloat(document.getElementById("currentexpenses").value); 
+    const rate = parseFloat(document.getElementById("inflation").value) / 100; 
+    const fireAge = parseFloat(document.getElementById("retirementage").value); 
+    const presentAge = parseFloat(document.getElementById("currentage").value); 
+    const coastFireAge = parseFloat(document.getElementById("coastfireage").value); 
+    const nominalMarketReturn = parseFloat(document.getElementById("nomreturn").value) / 100; 
     
-    const time = futureAge - presentAge;
+    // Calculate future expenses and FIRE number
+    const time = fireAge - presentAge;
+    const futureExpenses = presentExpenses * Math.pow((1 + rate), time);
+    const withdrawalRate = parseFloat(document.getElementById("withdrawalrate").value) / 100;
+    const fireNumber = futureExpenses / withdrawalRate;
 
     // Validate input
-    if (isNaN(presentExpenses) || isNaN(rate) || isNaN(futureAge) || isNaN(presentAge) || time <= 0) {
-        document.getElementById("fireNumber").innerHTML = "";
-        document.getElementById("coastFireNumber").innerHTML = "";
-        document.getElementById("monthlyContributions").innerHTML = "";
-        return;
-    }
-
-    // Calculate future expenses
-    const futureExpenses = presentExpenses * Math.pow((1 + (rate / 100)), time);
-    const withdrawalRate = parseFloat(document.getElementById("withdrawalrate").value);
-    let multiplier;
-
-    // Determine multiplier for the withdrawal rate
-    switch (withdrawalRate) {
-        case 2: multiplier = 50; break;
-        case 2.5: multiplier = 40; break;
-        case 3: multiplier = 33; break;
-        case 3.5: multiplier = 28.57; break;
-        case 4: multiplier = 25; break;
-        case 4.5: multiplier = 22; break;
-        case 5: multiplier = 20; break;
-        default: return;
-    }
-
-    const fireNumber = futureExpenses * multiplier;
-    const currentAge = parseFloat(document.getElementById("currentage").value);
-    const coastFireAge = parseFloat(document.getElementById("coastfireage").value);
-    const fireAge = parseFloat(document.getElementById("retirementage").value);
-    const nominalMarketReturn = parseFloat(document.getElementById("nomreturn").value) / 100;
-    const realMarketReturn = parseFloat(document.getElementById("nomreturn").value) - (parseFloat(document.getElementById("inflation").value) / 100);
-
-    // Validate coast fire age and market return
-    if (isNaN(coastFireAge) || isNaN(nominalMarketReturn)) {
+    if (isNaN(presentExpenses) || isNaN(rate) || isNaN(fireAge) || isNaN(presentAge) || time <= 0) {
         document.getElementById("fireNumber").innerHTML = "";
         document.getElementById("coastFireNumber").innerHTML = "";
         document.getElementById("monthlyContributions").innerHTML = "";
@@ -113,16 +87,16 @@ function calculate() {
     }
 
     // Calculate coast fire number and monthly payments
-    const coastFireNumber = fireNumber / Math.pow((1 + realMarketReturn), (fireAge - coastFireAge));
+    const coastFireNumber = fireNumber / Math.pow((1 + nominalMarketReturn), (fireAge - coastFireAge));
     const initialInvestment = parseFloat(document.getElementById("initialInvestment").value) || 0;
-    const yearsToGrow = coastFireAge - currentAge;
+    const yearsToGrow = coastFireAge - presentAge; // Fix this variable
 
-    const FV_initialInvestment = initialInvestment * Math.pow((1 + realMarketReturn), yearsToGrow);
+    const FV_initialInvestment = initialInvestment * Math.pow((1 + nominalMarketReturn), yearsToGrow);
     const FV_payments = coastFireNumber - FV_initialInvestment;
     
     let monthlyPayments = 0;
     if (FV_payments > 0 && yearsToGrow > 0) {
-        monthlyPayments = ((FV_payments * realMarketReturn) / (((1 + realMarketReturn) ** yearsToGrow )-1)) / 12;
+        monthlyPayments = ((FV_payments * nominalMarketReturn) / (((1 + nominalMarketReturn) ** yearsToGrow )-1)) / 12;
     }
 
     // Update the display elements
@@ -132,28 +106,6 @@ function calculate() {
 
     // Show the output section
     document.getElementById("output").style.display = 'block';
-}
-
-// Helper function to get multiplier based on withdrawal rate
-function getMultiplierForRate(rate) {
-    const multipliers = {
-        2: 50,
-        2.5: 40,
-        3: 33,
-        3.5: 28.57,
-        4: 25,
-        4.5: 22,
-        5: 20
-    };
-    return multipliers[rate];
-}
-
-// Helper function to clear results
-function clearResults() {
-    document.getElementById("fireNumber").innerHTML = "";
-    document.getElementById("coastFireNumber").innerHTML = "";
-    document.getElementById("monthlyContributions").innerHTML = "";
-    document.getElementById("output").style.display = 'none';
 }
 
 // Helper function to display results
