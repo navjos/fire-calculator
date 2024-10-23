@@ -125,9 +125,9 @@ function calculate() {
     }
 
     // Update the display elements
-    document.getElementById("fireNumber").innerHTML = "Número FIRE: $<mark>" + fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
-    document.getElementById("coastFireNumber").innerHTML = "Número Coast FIRE: $<mark>" + coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
-    document.getElementById("monthlyContributions").innerHTML = `Necesitas invertir <mark>$${monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> mensualmente para alcanzar Coast Fire.`;
+    document.getElementById("fireNumber").innerHTML = "FIRE Number": $<mark>" + fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
+    document.getElementById("coastFireNumber").innerHTML = "Coast FIRE Number: $<mark>" + coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
+    document.getElementById("monthlyContributions").innerHTML = `You need to invest <mark>$${monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly to reach Coast FIRE.`;
 
     // Show the output section
     document.getElementById("output").style.display = 'block';
