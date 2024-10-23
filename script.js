@@ -102,6 +102,7 @@ function calculate() {
     const coastFireAge = parseFloat(document.getElementById("coastfireage").value);
     const fireAge = parseFloat(document.getElementById("retirementage").value);
     const nominalMarketReturn = parseFloat(document.getElementById("nomreturn").value) / 100;
+    const realMarketReturn = parseFloat(document.getElementById("nomreturn").value) - (parseFloat(document.getElementById("inflation").value) / 100);
 
     // Validate coast fire age and market return
     if (isNaN(coastFireAge) || isNaN(nominalMarketReturn)) {
@@ -112,16 +113,16 @@ function calculate() {
     }
 
     // Calculate coast fire number and monthly payments
-    const coastFireNumber = fireNumber / Math.pow((1 + nominalMarketReturn), (fireAge - coastFireAge));
+    const coastFireNumber = fireNumber / Math.pow((1 + realMarketReturn), (fireAge - coastFireAge));
     const initialInvestment = parseFloat(document.getElementById("initialInvestment").value) || 0;
     const yearsToGrow = coastFireAge - currentAge;
 
-    const FV_initialInvestment = initialInvestment * Math.pow((1 + nominalMarketReturn), yearsToGrow);
+    const FV_initialInvestment = initialInvestment * Math.pow((1 + realMarketReturn), yearsToGrow);
     const FV_payments = coastFireNumber - FV_initialInvestment;
     
     let monthlyPayments = 0;
     if (FV_payments > 0 && yearsToGrow > 0) {
-        monthlyPayments = ((FV_payments * nominalMarketReturn) / (((1 + nominalMarketReturn) ** yearsToGrow )-1)) / 12;
+        monthlyPayments = ((FV_payments * realMarketReturn) / (((1 + realMarketReturn) ** yearsToGrow )-1)) / 12;
     }
 
     // Update the display elements
