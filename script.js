@@ -30,7 +30,6 @@ function futureValue() {
     const result = document.getElementById("result");
     result.innerHTML = `Your future annual expenses will be $<mark>${future.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark>`;
 }
-
 function updateMessages() {
     var currentAge = parseFloat(document.getElementById("currentage").value);
     var retirementAge = parseFloat(document.getElementById("retirementage").value);
@@ -42,7 +41,7 @@ function updateMessages() {
     var messagesDiv = document.getElementById("messages");
 
     if (!isNaN(x) && !isNaN(y)) {
-        messagesDiv.innerHTML = "Nice! You have <mark>" + x.toFixed(1) + "</mark> years until retirement and <mark>" + y.toFixed(1) + "</mark> years until Coast FIRE";
+        messagesDiv.innerHTML = "Nice! Your have <mark>" + x.toFixed(1) + "</mark> years until retirement and <mark>" + y.toFixed(1) + "</mark> years to reach Coast FIRE.";
         messagesDiv.style.display = 'block';
     } else {
         messagesDiv.style.display = 'none';
@@ -60,7 +59,6 @@ function updateRate() {
     document.getElementById("rate_val").innerText = rateval;
 }
 
- 
 function calculate() {
     // Hide the output initially
     document.getElementById("output").style.display = 'none';
@@ -125,7 +123,7 @@ function calculate() {
     }
 
     // Update the display elements
-    document.getElementById("fireNumber").innerHTML = "FIRE Number": $<mark>" + fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
+    document.getElementById("fireNumber").innerHTML = "FIRE Number: $<mark>" + fireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
     document.getElementById("coastFireNumber").innerHTML = "Coast FIRE Number: $<mark>" + coastFireNumber.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "</mark>";
     document.getElementById("monthlyContributions").innerHTML = `You need to invest <mark>$${monthlyPayments.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</mark> monthly to reach Coast FIRE.`;
 
@@ -188,3 +186,5 @@ window.onload = function() {
         }
     });
 };
+
+ 
